@@ -3,6 +3,7 @@ package RussiaBricks;
 import RussiaBricks.brick.IBrick;
 import RussiaBricks.brick.Point;
 import RussiaBricks.brick.Square;
+import RussiaBricks.brick.constants.IBrickConstants;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -16,9 +17,9 @@ import javafx.stage.Stage;
 
 public class Board extends Application {
 	
-	private static int ROW = 10;
-	private static int COLUMN = 10;
-	
+	private static final int ROW = 10;
+	private static final int COLUMN = 10;
+
 	private BorderPane borderPane;
 	private GridPane gridPane;
 	private Button moveDownButton;
@@ -26,13 +27,17 @@ public class Board extends Application {
 	private IBrick currentBrick;
 	
 	public Board() {
-		
+		this.borderPane = new BorderPane();
+		this.gridPane = new GridPane();
+		this.moveDownButton = new Button("Down");
+		this.dockButton = new Button("Dock");
 	}
 	
 	@Override
 	public void init() {
 		this.initCenterGrid();
 		this.initBottomBar();
+		this.initEventHandler();
 	}
 	
 	@Override
@@ -56,21 +61,12 @@ public class Board extends Application {
 			return;
 		}
 		
-		ObservableList<Node> nodeList = gridPane.getChildren();
-		for(Point pos : brick.getPositions()) {
-			for(Node node : nodeList) {
-				if(GridPane.getRowIndex(node) == pos.getRow() &&
-						GridPane.getColumnIndex(node) == pos.getColumn()) {
-					node.setStyle("-fx-background-color: #0000ff");
-				}
-			}
-		}
+		this.redrawBrick(brick);
+		
 		this.currentBrick = brick;
 	}
 	
 	private void initCenterGrid() {
-		this.borderPane = new BorderPane();
-		this.gridPane = new GridPane();
 		for(int i = 0; i < ROW; i++) {
 			for(int j = 0; j < COLUMN; j++) {
 				Button button = new Button();
@@ -83,11 +79,39 @@ public class Board extends Application {
 
 	private void initBottomBar() {
 		HBox bottomBar = new HBox();
-		this.moveDownButton = new Button("Down");
-		this.dockButton = new Button("OK");
 		bottomBar.setAlignment(Pos.BASELINE_CENTER);
 		bottomBar.getChildren().addAll(this.moveDownButton, this.dockButton);
 		this.borderPane.setBottom(bottomBar);
+	}
+	
+	private void initEventHandler() {
+		this.moveDownButton.setOnAction(event -> {
+			this.clearBrick(this.currentBrick);
+			this.currentBrick.moveDown();
+			this.redrawBrick(this.currentBrick);
+		});
+	}
+	
+	private void redrawBrick(IBrick brick) {
+		setBrickStyle(brick, IBrickConstants.BG_COLOR_STYLE_BLUE);
+	}
+	
+	private void clearBrick(IBrick brick) {
+		setBrickStyle(brick, IBrickConstants.DEFAULT_CELL_STYLE);
+	}
+	
+	private void setBrickStyle(IBrick brick, String style) {
+		if(brick != null) {
+			ObservableList<Node> nodeList = this.gridPane.getChildren();
+			for(Point pos : brick.getPositions()) {
+				for(Node node : nodeList) {
+					if(GridPane.getRowIndex(node) == pos.getRow() &&
+							GridPane.getColumnIndex(node) == pos.getColumn()) {
+						node.setStyle(style);
+					}
+				}
+			}
+		}
 	}
 
 	public static void main(String[] args) {
