@@ -1,8 +1,8 @@
-package RussiaBricks.shape;
+package RussiaBricks.brick;
 
 import java.util.List;
 
-public interface IShape {
+public interface IBrick {
 	
 	public void init();
 	public List<Point> getPositions();

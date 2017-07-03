@@ -1,6 +1,6 @@
-package RussiaBricks.shape;
+package RussiaBricks.brick;
 
-public class Square extends AbstractShape {
+public class Square extends AbstractBrick {
 	
 	public Square() {
 		this.init();

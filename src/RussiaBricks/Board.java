@@ -1,8 +1,8 @@
 package RussiaBricks;
 
-import RussiaBricks.shape.IShape;
-import RussiaBricks.shape.Point;
-import RussiaBricks.shape.Square;
+import RussiaBricks.brick.IBrick;
+import RussiaBricks.brick.Point;
+import RussiaBricks.brick.Square;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -14,7 +14,8 @@ import javafx.stage.Stage;
 public class Board extends Application {
 	
 	private static int ROW = 10;
-	private static int COLUMN = 10;	
+	private static int COLUMN = 10;
+	
 	private GridPane gridPane;
 	
 	public Board() {
@@ -49,7 +50,7 @@ public class Board extends Application {
         primaryStage.show();
 	}
 	
-	public void accept(IShape shape) {
+	public void accept(IBrick shape) {
 		if(shape == null) {
 			return;
 		}

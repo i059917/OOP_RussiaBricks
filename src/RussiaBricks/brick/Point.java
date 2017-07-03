@@ -1,4 +1,4 @@
-package RussiaBricks.shape;
+package RussiaBricks.brick;
 
 public class Point {
 	private int row;

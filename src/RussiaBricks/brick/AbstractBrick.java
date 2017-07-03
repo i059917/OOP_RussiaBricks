@@ -1,9 +1,9 @@
-package RussiaBricks.shape;
+package RussiaBricks.brick;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractShape implements IShape {
+public abstract class AbstractBrick implements IBrick {
 	
 	protected Point point1;
 	protected Point point2;
