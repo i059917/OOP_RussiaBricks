@@ -17,6 +17,7 @@ public class Board extends Application {
 	private static int COLUMN = 10;
 	
 	private GridPane gridPane;
+	private IBrick currentBrick;
 	
 	public Board() {
 		
@@ -50,13 +51,13 @@ public class Board extends Application {
         primaryStage.show();
 	}
 	
-	public void accept(IBrick shape) {
-		if(shape == null) {
+	public void accept(IBrick brick) {
+		if(brick == null) {
 			return;
 		}
 		
 		ObservableList<Node> nodeList = gridPane.getChildren();
-		for(Point pos : shape.getPositions()) {
+		for(Point pos : brick.getPositions()) {
 			for(Node node : nodeList) {
 				if(GridPane.getRowIndex(node) == pos.getRow() &&
 						GridPane.getColumnIndex(node) == pos.getColumn()) {
@@ -64,6 +65,7 @@ public class Board extends Application {
 				}
 			}
 		}
+		this.currentBrick = brick;
 	}
 
 	public static void main(String[] args) {
