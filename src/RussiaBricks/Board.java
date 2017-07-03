@@ -31,23 +31,8 @@ public class Board extends Application {
 	
 	@Override
 	public void init() {
-		this.borderPane = new BorderPane();
-		this.gridPane = new GridPane();
-		for(int i = 0; i < ROW; i++) {
-			for(int j = 0; j < COLUMN; j++) {
-				Button button = new Button();
-				button.setMinSize(30, 30);
-				this.gridPane.add(button, j, i);
-			}
-		}
-		this.borderPane.setCenter(this.gridPane);
-		
-		HBox bottomBar = new HBox();
-		this.moveDownButton = new Button("Down");
-		this.dockButton = new Button("OK");
-		bottomBar.setAlignment(Pos.BASELINE_CENTER);
-		bottomBar.getChildren().addAll(this.moveDownButton, this.dockButton);
-		this.borderPane.setBottom(bottomBar);
+		this.initCenterGrid();
+		this.initBottomBar();
 	}
 	
 	@Override
@@ -81,6 +66,28 @@ public class Board extends Application {
 			}
 		}
 		this.currentBrick = brick;
+	}
+	
+	private void initCenterGrid() {
+		this.borderPane = new BorderPane();
+		this.gridPane = new GridPane();
+		for(int i = 0; i < ROW; i++) {
+			for(int j = 0; j < COLUMN; j++) {
+				Button button = new Button();
+				button.setMinSize(30, 30);
+				this.gridPane.add(button, j, i);
+			}
+		}
+		this.borderPane.setCenter(this.gridPane);
+	}
+
+	private void initBottomBar() {
+		HBox bottomBar = new HBox();
+		this.moveDownButton = new Button("Down");
+		this.dockButton = new Button("OK");
+		bottomBar.setAlignment(Pos.BASELINE_CENTER);
+		bottomBar.getChildren().addAll(this.moveDownButton, this.dockButton);
+		this.borderPane.setBottom(bottomBar);
 	}
 
 	public static void main(String[] args) {
