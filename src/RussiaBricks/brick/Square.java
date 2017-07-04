@@ -1,5 +1,7 @@
 package RussiaBricks.brick;
 
+import java.util.List;
+
 public class Square extends AbstractBrick {
 	
 	public Square() {
@@ -17,5 +19,20 @@ public class Square extends AbstractBrick {
 	@Override
 	public void rotate() {
 
+	}
+
+	@Override
+	public List<Point> getLeftBoundary() {
+		return null;
+	}
+
+	@Override
+	public List<Point> getRightBoundary() {
+		return null;
+	}
+
+	@Override
+	public List<Point> getBottomBoundary() {
+		return null;
 	}
 }
