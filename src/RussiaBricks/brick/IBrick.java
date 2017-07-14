@@ -10,7 +10,9 @@ public interface IBrick {
 	public void moveRight();
 	public void moveDown();
 	public void rotate();
+
 	public int getLeftBoundary();
 	public int getRightBoundary();
 	public int getBottomBoundary();
+
 }

@@ -1,5 +1,7 @@
 package RussiaBricks.brick;
 
+import java.util.List;
+
 public class Square extends AbstractBrick {
 	
 	public Square() {
