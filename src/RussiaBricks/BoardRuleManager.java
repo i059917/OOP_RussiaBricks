@@ -8,6 +8,9 @@ public class BoardRuleManager {
 	}
 	
 	public boolean isOKToMoveLeft() {
+		if(board.getCurrentBrick().getLeftBoundary() == 0) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -19,6 +22,9 @@ public class BoardRuleManager {
 	}
 	
 	public boolean isOKToMoveRight() {
+		if(board.getCurrentBrick().getRightBoundary() == Board.COLUMN - 1) {
+			return false;
+		}
 		return true;
 	}
 }
