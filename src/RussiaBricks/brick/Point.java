@@ -24,4 +24,9 @@ public class Point {
 	public void setColumn(int column) {
 		this.column = column;
 	}
+	
+//	@Override
+//	public int hashCode() {
+//		
+//	}
 }

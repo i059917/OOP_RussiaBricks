@@ -1,6 +1,7 @@
 package RussiaBricks;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import RussiaBricks.brick.IBrick;
@@ -168,6 +169,12 @@ public class Board extends Application {
 				}
 			}
 		}
+	}
+	
+	private List<Point> getAboveOccupiedPointsByRow(int row) {
+		//for()
+		// TODO 
+		return null;
 	}
 	
 	private void setPointStatus(int row, int column, int status) {
