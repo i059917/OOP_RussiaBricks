@@ -17,24 +17,34 @@ import javafx.stage.Stage;
 
 public class Board extends Application {
 	
-	private static final int ROW = 10;
-	private static final int COLUMN = 10;
+	public static final int ROW = 10;
+	public static final int COLUMN = 10;
 
+	private BoardRuleManager ruleManager;
 	private BorderPane borderPane;
 	private GridPane gridPane;
+	private Button moveLeftButton;
 	private Button moveDownButton;
+	private Button moveRightButton;
 	private Button dockButton;
 	private IBrick currentBrick;
-	
+
 	public Board() {
 		this.borderPane = new BorderPane();
 		this.gridPane = new GridPane();
+		this.moveLeftButton = new Button("Left");
 		this.moveDownButton = new Button("Down");
+		this.moveRightButton = new Button("Right");
 		this.dockButton = new Button("Dock");
+	}
+	
+	public IBrick getCurrentBrick() {
+		return currentBrick;
 	}
 	
 	@Override
 	public void init() {
+		this.ruleManager = new BoardRuleManager(this);
 		this.initCenterGrid();
 		this.initBottomBar();
 		this.initEventHandler();
@@ -60,10 +70,8 @@ public class Board extends Application {
 		if(brick == null) {
 			return;
 		}
-		
-		this.redrawBrick(brick);
-		
 		this.currentBrick = brick;
+		this.redrawBrick(brick);
 	}
 	
 	private void initCenterGrid() {
@@ -80,15 +88,34 @@ public class Board extends Application {
 	private void initBottomBar() {
 		HBox bottomBar = new HBox();
 		bottomBar.setAlignment(Pos.BASELINE_CENTER);
-		bottomBar.getChildren().addAll(this.moveDownButton, this.dockButton);
+		bottomBar.getChildren().addAll(this.moveLeftButton,
+				this.moveDownButton, this.moveRightButton, this.dockButton);
 		this.borderPane.setBottom(bottomBar);
 	}
 	
 	private void initEventHandler() {
+		this.moveLeftButton.setOnAction(event -> {
+			if(ruleManager.isOKToMoveLeft()) {
+				this.clearBrick(this.currentBrick);
+				this.currentBrick.moveLeft();;
+				this.redrawBrick(this.currentBrick);
+			}
+		});
+		
 		this.moveDownButton.setOnAction(event -> {
-			this.clearBrick(this.currentBrick);
-			this.currentBrick.moveDown();
-			this.redrawBrick(this.currentBrick);
+			if(ruleManager.isOKToMoveDown()) {
+				this.clearBrick(this.currentBrick);
+				this.currentBrick.moveDown();
+				this.redrawBrick(this.currentBrick);
+			}
+		});
+		
+		this.moveRightButton.setOnAction(event -> {
+			if(ruleManager.isOKToMoveRight()) {
+				this.clearBrick(this.currentBrick);
+				this.currentBrick.moveRight();
+				this.redrawBrick(this.currentBrick);
+			}
 		});
 	}
 	
