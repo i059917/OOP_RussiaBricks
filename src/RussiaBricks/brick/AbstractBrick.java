@@ -13,30 +13,30 @@ public abstract class AbstractBrick implements IBrick {
 	protected List<Point> bottomBoundary = new ArrayList<Point>();
 	protected List<Point> leftBoundary = new ArrayList<Point>();
 	protected List<Point> rightBoundary = new ArrayList<Point>();
-	protected List<Point> positionList = new ArrayList<Point>();
+	protected List<Point> pointList = new ArrayList<Point>();
 	
 	@Override
-	public List<Point> getPositions() {
-		return positionList;
+	public List<Point> getAllPoints() {
+		return pointList;
 	}
 
 	@Override
 	public void moveLeft() {
-		for(Point pos : positionList) {
+		for(Point pos : pointList) {
 			pos.setColumn(pos.getColumn() - 1);
 		}
 	}
 	
 	@Override
 	public void moveRight() {
-		for(Point pos : positionList) {
+		for(Point pos : pointList) {
 			pos.setColumn(pos.getColumn() + 1);
 		}
 	}
 	
 	@Override
 	public void moveDown() {
-		for(Point pos : positionList) {
+		for(Point pos : pointList) {
 			pos.setRow(pos.getRow() + 1);
 		}
 	}

@@ -1,5 +1,8 @@
 package RussiaBricks;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import RussiaBricks.brick.IBrick;
 import RussiaBricks.brick.Point;
 import RussiaBricks.brick.Square;
@@ -29,6 +32,7 @@ public class Board extends Application {
 	private IBrick currentBrick;
 	
 	private BoardRuleManager ruleManager;
+	private Map<String, Integer> pointStatusMap;
 
 	public Board() {
 		this.borderPane = new BorderPane();
@@ -76,11 +80,16 @@ public class Board extends Application {
 	}
 	
 	private void initCenterGrid() {
+		this.pointStatusMap = new HashMap<String, Integer>();
+		
 		for(int i = 0; i < ROW; i++) {
 			for(int j = 0; j < COLUMN; j++) {
 				Button button = new Button();
 				button.setMinSize(30, 30);
 				this.gridPane.add(button, j, i);
+				
+				String key = i + "" + j;
+				pointStatusMap.put(key, IBrickConstants.POINT_EMPTY);
 			}
 		}
 		this.borderPane.setCenter(this.gridPane);
@@ -128,6 +137,14 @@ public class Board extends Application {
 	
 	private void dockBrick() {
 		setBrickStyle(IBrickConstants.BG_COLOR_STYLE_BLACK);
+		for(Point point : this.currentBrick.getAllPoints()) {
+			this.setPointStatus(point.getRow(), point.getColumn(), IBrickConstants.POINT_OCCUPIED);
+		}
+//		for(Point point : this.currentBrick.getAllPoints()) {
+//			if(ruleManager.isFullRow(point.getRow())) {
+//				
+//			}
+//		}
 		this.accept(new Square());
 	}
 	
@@ -142,7 +159,7 @@ public class Board extends Application {
 	private void setBrickStyle(String style) {
 		if(this.currentBrick != null) {
 			ObservableList<Node> nodeList = this.gridPane.getChildren();
-			for(Point pos : this.currentBrick.getPositions()) {
+			for(Point pos : this.currentBrick.getAllPoints()) {
 				for(Node node : nodeList) {
 					if(GridPane.getRowIndex(node) == pos.getRow() &&
 							GridPane.getColumnIndex(node) == pos.getColumn()) {
@@ -150,6 +167,21 @@ public class Board extends Application {
 					}
 				}
 			}
+		}
+	}
+	
+	private void setPointStatus(int row, int column, int status) {
+		String key = row + "" + column;
+		pointStatusMap.put(key, status);
+	}
+	
+	public int getPointStatus(int row, int column) {
+		String key = row + "" + column;
+		Integer status = pointStatusMap.get(key);
+		if(status == null) {
+			return IBrickConstants.POINT_OCCUPIED;
+		} else {
+			return status;
 		}
 	}
 

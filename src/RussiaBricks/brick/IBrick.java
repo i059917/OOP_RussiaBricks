@@ -5,7 +5,7 @@ import java.util.List;
 public interface IBrick {
 	
 	public void init();
-	public List<Point> getPositions();
+	public List<Point> getAllPoints();
 	public void moveLeft();
 	public void moveRight();
 	public void moveDown();

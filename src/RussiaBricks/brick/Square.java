@@ -10,10 +10,10 @@ public class Square extends AbstractBrick {
 
 	@Override
 	public void init() {
-		positionList.add(point1 = new Point(0, 4));
-		positionList.add(point2 = new Point(0, 5));
-		positionList.add(point3 = new Point(1, 4));
-		positionList.add(point4 = new Point(1, 5));
+		pointList.add(point1 = new Point(0, 4));
+		pointList.add(point2 = new Point(0, 5));
+		pointList.add(point3 = new Point(1, 4));
+		pointList.add(point4 = new Point(1, 5));
 		
 		ceilBoundary.add(point1);
 		ceilBoundary.add(point2);
