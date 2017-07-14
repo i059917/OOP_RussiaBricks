@@ -14,6 +14,15 @@ public class Square extends AbstractBrick {
 		positionList.add(point2 = new Point(0, 5));
 		positionList.add(point3 = new Point(1, 4));
 		positionList.add(point4 = new Point(1, 5));
+		
+		ceilBoundary.add(point1);
+		ceilBoundary.add(point2);
+		bottomBoundary.add(point3);
+		bottomBoundary.add(point4);
+		leftBoundary.add(point1);
+		leftBoundary.add(point3);
+		rightBoundary.add(point2);
+		rightBoundary.add(point4);
 	}
 
 	@Override
@@ -22,17 +31,22 @@ public class Square extends AbstractBrick {
 	}
 
 	@Override
-	public int getLeftBoundary() {
-		return point1.getColumn();
+	public List<Point> getLeftBoundary() {
+		return this.leftBoundary;
 	}
 
 	@Override
-	public int getRightBoundary() {
-		return point2.getColumn();
+	public List<Point> getRightBoundary() {
+		return this.rightBoundary;
+	}
+	
+	@Override
+	public List<Point> getCeilBoundary() {
+		return this.ceilBoundary;
 	}
 
 	@Override
-	public int getBottomBoundary() {
-		return point3.getRow();
+	public List<Point> getBottomBoundary() {
+		return this.bottomBoundary;
 	}
 }

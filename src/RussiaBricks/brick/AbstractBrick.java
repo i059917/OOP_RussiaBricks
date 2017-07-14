@@ -9,6 +9,10 @@ public abstract class AbstractBrick implements IBrick {
 	protected Point point2;
 	protected Point point3;
 	protected Point point4;
+	protected List<Point> ceilBoundary = new ArrayList<Point>();
+	protected List<Point> bottomBoundary = new ArrayList<Point>();
+	protected List<Point> leftBoundary = new ArrayList<Point>();
+	protected List<Point> rightBoundary = new ArrayList<Point>();
 	protected List<Point> positionList = new ArrayList<Point>();
 	
 	@Override

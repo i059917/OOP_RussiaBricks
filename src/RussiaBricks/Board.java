@@ -20,7 +20,6 @@ public class Board extends Application {
 	public static final int ROW = 10;
 	public static final int COLUMN = 10;
 
-	private BoardRuleManager ruleManager;
 	private BorderPane borderPane;
 	private GridPane gridPane;
 	private Button moveLeftButton;
@@ -28,6 +27,8 @@ public class Board extends Application {
 	private Button moveRightButton;
 	private Button dockButton;
 	private IBrick currentBrick;
+	
+	private BoardRuleManager ruleManager;
 
 	public Board() {
 		this.borderPane = new BorderPane();
@@ -66,7 +67,7 @@ public class Board extends Application {
         primaryStage.show();
 	}
 	
-	public void accept(IBrick brick) {
+	private void accept(IBrick brick) {
 		if(brick == null) {
 			return;
 		}
@@ -117,6 +118,17 @@ public class Board extends Application {
 				this.redrawBrick();
 			}
 		});
+		
+		this.dockButton.setOnAction(event -> {
+			if(ruleManager.isOKToDock()) {
+				dockBrick();
+			}
+		});
+	}
+	
+	private void dockBrick() {
+		setBrickStyle(IBrickConstants.BG_COLOR_STYLE_BLACK);
+		this.accept(new Square());
 	}
 	
 	private void redrawBrick() {
@@ -139,10 +151,6 @@ public class Board extends Application {
 				}
 			}
 		}
-	}
-	
-	private void dockBrick() {
-		
 	}
 
 	public static void main(String[] args) {

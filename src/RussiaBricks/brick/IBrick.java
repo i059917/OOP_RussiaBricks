@@ -11,8 +11,9 @@ public interface IBrick {
 	public void moveDown();
 	public void rotate();
 
-	public int getLeftBoundary();
-	public int getRightBoundary();
-	public int getBottomBoundary();
+	public List<Point> getLeftBoundary();
+	public List<Point> getRightBoundary();
+	public List<Point> getCeilBoundary();
+	public List<Point> getBottomBoundary();
 
 }
