@@ -71,7 +71,7 @@ public class Board extends Application {
 			return;
 		}
 		this.currentBrick = brick;
-		this.redrawBrick(brick);
+		this.redrawBrick();
 	}
 	
 	private void initCenterGrid() {
@@ -96,41 +96,41 @@ public class Board extends Application {
 	private void initEventHandler() {
 		this.moveLeftButton.setOnAction(event -> {
 			if(ruleManager.isOKToMoveLeft()) {
-				this.clearBrick(this.currentBrick);
+				this.clearBrick();
 				this.currentBrick.moveLeft();;
-				this.redrawBrick(this.currentBrick);
+				this.redrawBrick();
 			}
 		});
 		
 		this.moveDownButton.setOnAction(event -> {
 			if(ruleManager.isOKToMoveDown()) {
-				this.clearBrick(this.currentBrick);
+				this.clearBrick();
 				this.currentBrick.moveDown();
-				this.redrawBrick(this.currentBrick);
+				this.redrawBrick();
 			}
 		});
 		
 		this.moveRightButton.setOnAction(event -> {
 			if(ruleManager.isOKToMoveRight()) {
-				this.clearBrick(this.currentBrick);
+				this.clearBrick();
 				this.currentBrick.moveRight();
-				this.redrawBrick(this.currentBrick);
+				this.redrawBrick();
 			}
 		});
 	}
 	
-	private void redrawBrick(IBrick brick) {
-		setBrickStyle(brick, IBrickConstants.BG_COLOR_STYLE_BLUE);
+	private void redrawBrick() {
+		setBrickStyle(IBrickConstants.BG_COLOR_STYLE_BLUE);
 	}
 	
-	private void clearBrick(IBrick brick) {
-		setBrickStyle(brick, IBrickConstants.DEFAULT_CELL_STYLE);
+	private void clearBrick() {
+		setBrickStyle(IBrickConstants.DEFAULT_CELL_STYLE);
 	}
 	
-	private void setBrickStyle(IBrick brick, String style) {
-		if(brick != null) {
+	private void setBrickStyle(String style) {
+		if(this.currentBrick != null) {
 			ObservableList<Node> nodeList = this.gridPane.getChildren();
-			for(Point pos : brick.getPositions()) {
+			for(Point pos : this.currentBrick.getPositions()) {
 				for(Node node : nodeList) {
 					if(GridPane.getRowIndex(node) == pos.getRow() &&
 							GridPane.getColumnIndex(node) == pos.getColumn()) {
@@ -139,6 +139,10 @@ public class Board extends Application {
 				}
 			}
 		}
+	}
+	
+	private void dockBrick() {
+		
 	}
 
 	public static void main(String[] args) {
