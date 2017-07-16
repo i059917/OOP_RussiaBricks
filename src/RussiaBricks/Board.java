@@ -33,7 +33,7 @@ public class Board extends Application {
 	private IBrick currentBrick;
 	
 	private BoardRuleManager ruleManager;
-	private Map<String, Integer> pointStatusMap;
+	private Map<Point, Integer> pointStatusMap;
 
 	public Board() {
 		this.borderPane = new BorderPane();
@@ -81,7 +81,7 @@ public class Board extends Application {
 	}
 	
 	private void initCenterGrid() {
-		this.pointStatusMap = new HashMap<String, Integer>();
+		this.pointStatusMap = new HashMap<Point, Integer>();
 		
 		for(int i = 0; i < ROW; i++) {
 			for(int j = 0; j < COLUMN; j++) {
@@ -89,8 +89,8 @@ public class Board extends Application {
 				button.setMinSize(30, 30);
 				this.gridPane.add(button, j, i);
 				
-				String key = i + "" + j;
-				pointStatusMap.put(key, IBrickConstants.POINT_EMPTY);
+				Point point = new Point(i , j);
+				pointStatusMap.put(point, IBrickConstants.POINT_EMPTY);
 			}
 		}
 		this.borderPane.setCenter(this.gridPane);
@@ -139,7 +139,7 @@ public class Board extends Application {
 	private void dockBrick() {
 		setBrickStyle(IBrickConstants.BG_COLOR_STYLE_BLACK);
 		for(Point point : this.currentBrick.getAllPoints()) {
-			this.setPointStatus(point.getRow(), point.getColumn(), IBrickConstants.POINT_OCCUPIED);
+			this.setPointStatus(point, IBrickConstants.POINT_OCCUPIED);
 		}
 //		for(Point point : this.currentBrick.getAllPoints()) {
 //			if(ruleManager.isFullRow(point.getRow())) {
@@ -156,17 +156,21 @@ public class Board extends Application {
 	private void clearBrick() {
 		setBrickStyle(IBrickConstants.DEFAULT_CELL_STYLE);
 	}
-	
+
 	private void setBrickStyle(String style) {
 		if(this.currentBrick != null) {
-			ObservableList<Node> nodeList = this.gridPane.getChildren();
-			for(Point pos : this.currentBrick.getAllPoints()) {
-				for(Node node : nodeList) {
-					if(GridPane.getRowIndex(node) == pos.getRow() &&
-							GridPane.getColumnIndex(node) == pos.getColumn()) {
-						node.setStyle(style);
-					}
-				}
+			for(Point point : this.currentBrick.getAllPoints()) {
+				this.setPointStyle(point, style);
+			}
+		}
+	}
+
+	private void setPointStyle(Point point, String style) {
+		ObservableList<Node> nodeList = this.gridPane.getChildren();
+		for(Node node : nodeList) {
+			if(GridPane.getRowIndex(node) == point.getRow() &&
+					GridPane.getColumnIndex(node) == point.getColumn()) {
+				node.setStyle(style);
 			}
 		}
 	}
@@ -177,14 +181,12 @@ public class Board extends Application {
 		return null;
 	}
 	
-	private void setPointStatus(int row, int column, int status) {
-		String key = row + "" + column;
-		pointStatusMap.put(key, status);
+	private void setPointStatus(Point point, int status) {
+		pointStatusMap.put(point, status);
 	}
 	
-	public int getPointStatus(int row, int column) {
-		String key = row + "" + column;
-		Integer status = pointStatusMap.get(key);
+	public int getPointStatus(Point point) {
+		Integer status = pointStatusMap.get(point);
 		if(status == null) {
 			return IBrickConstants.POINT_OCCUPIED;
 		} else {

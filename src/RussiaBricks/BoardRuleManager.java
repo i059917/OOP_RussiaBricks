@@ -13,7 +13,7 @@ public class BoardRuleManager {
 	public boolean isOKToMoveLeft() {
 		for(Point point : board.getCurrentBrick().getLeftBoundary()) {
 			if(point.getColumn() == 0 
-					|| board.getPointStatus(point.getRow(), point.getColumn() - 1) == IBrickConstants.POINT_OCCUPIED) {
+					|| board.getPointStatus(new Point(point.getRow(), point.getColumn() - 1)) == IBrickConstants.POINT_OCCUPIED) {
 				return false;
 			}
 		}
@@ -23,7 +23,7 @@ public class BoardRuleManager {
 	public boolean isOKToMoveDown() {
 		for(Point point : board.getCurrentBrick().getBottomBoundary()) {
 			if(point.getRow() == Board.ROW - 1
-					|| board.getPointStatus(point.getRow() + 1, point.getColumn()) == IBrickConstants.POINT_OCCUPIED) {
+					|| board.getPointStatus(new Point(point.getRow() + 1, point.getColumn())) == IBrickConstants.POINT_OCCUPIED) {
 				return false;
 			}
 		}
@@ -33,7 +33,7 @@ public class BoardRuleManager {
 	public boolean isOKToMoveRight() {
 		for(Point point : board.getCurrentBrick().getRightBoundary()) {
 			if(point.getColumn() == Board.COLUMN - 1
-					|| board.getPointStatus(point.getRow(), point.getColumn() + 1) == IBrickConstants.POINT_OCCUPIED) {
+					|| board.getPointStatus(new Point(point.getRow(), point.getColumn() + 1)) == IBrickConstants.POINT_OCCUPIED) {
 				return false;
 			}
 		}

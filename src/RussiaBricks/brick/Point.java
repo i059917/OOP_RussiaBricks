@@ -25,8 +25,17 @@ public class Point {
 		this.column = column;
 	}
 	
-//	@Override
-//	public int hashCode() {
-//		
-//	}
+	@Override
+	public int hashCode() {
+		return (row * 2) + (column * 3) + (row + column);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Point) {
+			Point point = (Point)obj;
+			return (point.row == this.row) && (point.column == this.column);
+		}
+		return false;
+	}
 }
