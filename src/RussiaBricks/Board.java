@@ -33,6 +33,7 @@ public class Board extends Application {
 	private IBrick currentBrick;
 	
 	private BoardRuleManager ruleManager;
+
 	private Map<Point, Integer> pointStatusMap;
 
 	public Board() {
@@ -47,7 +48,11 @@ public class Board extends Application {
 	public IBrick getCurrentBrick() {
 		return currentBrick;
 	}
-	
+
+	public Map<Point, Integer> getPointStatusMap() {
+		return pointStatusMap;
+	}
+
 	@Override
 	public void init() {
 		this.ruleManager = new BoardRuleManager(this);
@@ -141,11 +146,11 @@ public class Board extends Application {
 		for(Point point : this.currentBrick.getAllPoints()) {
 			this.setPointStatus(point, IBrickConstants.POINT_OCCUPIED);
 		}
-//		for(Point point : this.currentBrick.getAllPoints()) {
-//			if(ruleManager.isFullRow(point.getRow())) {
-//				
-//			}
-//		}
+		for(Point point : this.currentBrick.getAllPoints()) {
+			if(ruleManager.isFullRowOccupied(point.getRow())) {
+				this.setRowStyle(point.getRow(), IBrickConstants.DEFAULT_CELL_STYLE);
+			}
+		}
 		this.accept(new Square());
 	}
 	
@@ -161,6 +166,15 @@ public class Board extends Application {
 		if(this.currentBrick != null) {
 			for(Point point : this.currentBrick.getAllPoints()) {
 				this.setPointStyle(point, style);
+			}
+		}
+	}
+
+	private void setRowStyle(int row, String style) {
+		ObservableList<Node> nodeList = this.gridPane.getChildren();
+		for(Node node : nodeList) {
+			if(GridPane.getRowIndex(node) == row) {
+				this.setPointStyle(new Point(row, GridPane.getColumnIndex(node)), style);
 			}
 		}
 	}

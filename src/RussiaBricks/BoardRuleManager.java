@@ -2,6 +2,7 @@ package RussiaBricks;
 
 import RussiaBricks.brick.Point;
 import RussiaBricks.brick.constants.IBrickConstants;
+import java.util.Map;
 
 public class BoardRuleManager {
 	private Board board;
@@ -44,7 +45,20 @@ public class BoardRuleManager {
 		return !this.isOKToMoveDown();
 	}
 	
-	public boolean isFullRow(int row) {
-		return false;
+	public boolean isFullRowOccupied(int row) {
+		if(row < 0 || row >= Board.ROW) {
+			return false;
+		}
+
+		Map<Point, Integer> statusMap = board.getPointStatusMap();
+		for(Point point : statusMap.keySet()) {
+			if(row == point.getRow()) {
+				if(statusMap.get(point) == IBrickConstants.POINT_EMPTY) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 }
