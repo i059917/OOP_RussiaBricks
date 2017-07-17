@@ -1,8 +1,9 @@
 package RussiaBricks;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import RussiaBricks.brick.IBrick;
 import RussiaBricks.brick.Point;
@@ -86,7 +87,7 @@ public class Board extends Application {
 	}
 	
 	private void initCenterGrid() {
-		this.pointStatusMap = new HashMap<Point, Integer>();
+		this.pointStatusMap = new TreeMap<Point, Integer>();
 		
 		for(int i = 0; i < ROW; i++) {
 			for(int j = 0; j < COLUMN; j++) {
@@ -142,15 +143,30 @@ public class Board extends Application {
 	}
 	
 	private void dockBrick() {
-		setBrickStyle(IBrickConstants.BG_COLOR_STYLE_BLACK);
-		for(Point point : this.currentBrick.getAllPoints()) {
-			this.setPointStatus(point, IBrickConstants.POINT_OCCUPIED);
-		}
+		//setBrickStyle(IBrickConstants.BG_COLOR_STYLE_BLACK);
+		this.setBrickStatus(this.currentBrick, IBrickConstants.POINT_OCCUPIED);
+
+		int topFullRow = Board.ROW;
+		int fullRowCount = 0;
 		for(Point point : this.currentBrick.getAllPoints()) {
 			if(ruleManager.isFullRowOccupied(point.getRow())) {
-				this.setRowStyle(point.getRow(), IBrickConstants.DEFAULT_CELL_STYLE);
+				this.setRowStatus(point.getRow(), IBrickConstants.POINT_EMPTY);
+				if(topFullRow > point.getRow()) {
+					topFullRow = point.getRow();
+				}
+				fullRowCount++;
 			}
 		}
+		if(fullRowCount > 0) {
+			List<Point> abovePoints = this.getAboveOccupiedPointsByRow(topFullRow);
+			for(Point abovePoint : abovePoints) {
+				this.setPointStatus(abovePoint, IBrickConstants.POINT_EMPTY);
+				this.setPointStatus(new Point(abovePoint.getRow() + fullRowCount, abovePoint.getColumn()), IBrickConstants.POINT_OCCUPIED);
+			}
+		}
+		
+		
+		this.redrawGrid();
 		this.accept(new Square());
 	}
 	
@@ -158,28 +174,30 @@ public class Board extends Application {
 		setBrickStyle(IBrickConstants.BG_COLOR_STYLE_BLUE);
 	}
 	
+	private void redrawGrid() {
+		ObservableList<Node> nodeList = this.gridPane.getChildren();
+		for(Node node : nodeList) {
+			Point point = new Point(GridPane.getRowIndex(node), 	GridPane.getColumnIndex(node));
+			int pointStatus = this.getPointStatus(point);
+			if(pointStatus == IBrickConstants.POINT_EMPTY) {
+				this.setPointStyle(point, IBrickConstants.DEFAULT_CELL_STYLE);
+			} else {
+				this.setPointStyle(point, IBrickConstants.BG_COLOR_STYLE_BLACK);
+			}
+		}
+	}
+	
 	private void clearBrick() {
 		setBrickStyle(IBrickConstants.DEFAULT_CELL_STYLE);
 	}
 
-	private void setBrickStyle(String style) {
-		if(this.currentBrick != null) {
-			for(Point point : this.currentBrick.getAllPoints()) {
-				this.setPointStyle(point, style);
-			}
-		}
-	}
-
-	private void setRowStyle(int row, String style) {
-		ObservableList<Node> nodeList = this.gridPane.getChildren();
-		for(Node node : nodeList) {
-			if(GridPane.getRowIndex(node) == row) {
-				this.setPointStyle(new Point(row, GridPane.getColumnIndex(node)), style);
-			}
-		}
-	}
-
 	private void setPointStyle(Point point, String style) {
+		if(point.getRow() < 0 || point.getRow() >= Board.ROW) {
+			return;
+		}
+		if(point.getColumn() < 0 || point.getColumn() >= Board.COLUMN) {
+			return;
+		}
 		ObservableList<Node> nodeList = this.gridPane.getChildren();
 		for(Node node : nodeList) {
 			if(GridPane.getRowIndex(node) == point.getRow() &&
@@ -189,14 +207,49 @@ public class Board extends Application {
 		}
 	}
 	
+	private void setBrickStyle(String style) {
+		if(this.currentBrick != null) {
+			for(Point point : this.currentBrick.getAllPoints()) {
+				this.setPointStyle(point, style);
+			}
+		}
+	}
+	
 	private List<Point> getAboveOccupiedPointsByRow(int row) {
-		//for()
-		// TODO 
-		return null;
+		List<Point> abovePoints = new ArrayList<Point>();
+		if(row > 0 && row < Board.ROW) {
+			for(Point point : this.pointStatusMap.keySet()) {
+				if(point.getRow() < row && this.getPointStatus(point) == IBrickConstants.POINT_OCCUPIED) {
+					abovePoints.add(point);
+				}
+			}
+		}
+		return abovePoints;
 	}
 	
 	private void setPointStatus(Point point, int status) {
+		if(point.getRow() < 0 || point.getRow() >= Board.ROW) {
+			return;
+		}
+		if(point.getColumn() < 0 || point.getColumn() >= Board.COLUMN) {
+			return;
+		}
 		pointStatusMap.put(point, status);
+	}
+	
+	private void setBrickStatus(IBrick brick, int status) {
+		for(Point point : brick.getAllPoints()) {
+			this.setPointStatus(point, status);
+		}
+	}
+	
+	private void setRowStatus(int row, int status) {
+		ObservableList<Node> nodeList = this.gridPane.getChildren();
+		for(Node node : nodeList) {
+			if(GridPane.getRowIndex(node) == row) {
+				this.setPointStatus(new Point(row, GridPane.getColumnIndex(node)), status);
+			}
+		}
 	}
 	
 	public int getPointStatus(Point point) {

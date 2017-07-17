@@ -1,6 +1,6 @@
 package RussiaBricks.brick;
 
-public class Point {
+public class Point implements Comparable {
 	private int row;
 	private int column;
 	
@@ -37,5 +37,20 @@ public class Point {
 			return (point.row == this.row) && (point.column == this.column);
 		}
 		return false;
+	}
+
+	@Override
+	public int compareTo(Object obj) {
+		if(obj instanceof Point) {
+			Point point = (Point)obj;
+			if(this.getRow() > point.getRow()) {
+				return -1;
+			} else if (this.getRow() == point.getRow()) {
+				return this.getColumn() - point.getColumn();
+			} else {
+				return 1;
+			}
+		}
+		return 1;
 	}
 }
