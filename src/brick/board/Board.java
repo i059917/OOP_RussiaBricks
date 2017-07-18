@@ -7,8 +7,8 @@ import java.util.TreeMap;
 
 import brick.IBrick;
 import brick.Point;
-import brick.Square;
 import brick.constants.IBrickConstants;
+import brick.factory.BrickFactory;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Board extends Application {
@@ -31,6 +32,8 @@ public class Board extends Application {
 	private Button moveDownButton;
 	private Button moveRightButton;
 	private Button dockButton;
+	private Button startButton;
+	private Button endButton;
 	private IBrick currentBrick;
 	
 	private BoardRuleManager ruleManager;
@@ -44,6 +47,8 @@ public class Board extends Application {
 		this.moveDownButton = new Button("Down");
 		this.moveRightButton = new Button("Right");
 		this.dockButton = new Button("Dock");
+		this.startButton = new Button("Start");
+		this.endButton = new Button("End");
 	}
 	
 	public IBrick getCurrentBrick() {
@@ -59,6 +64,7 @@ public class Board extends Application {
 		this.ruleManager = new BoardRuleManager(this);
 		this.initCenterGrid();
 		this.initBottomBar();
+		this.initLeftBar();
 		this.initEventHandler();
 	}
 	
@@ -70,7 +76,7 @@ public class Board extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.init();
-		this.accept(new Square());
+		//this.accept(BrickFactory.createBrick());
 		
 		primaryStage.setTitle("Russia Bricks");
         Scene scene = new Scene(this.borderPane);
@@ -105,12 +111,24 @@ public class Board extends Application {
 	private void initBottomBar() {
 		HBox bottomBar = new HBox();
 		bottomBar.setAlignment(Pos.BASELINE_CENTER);
-		bottomBar.getChildren().addAll(this.moveLeftButton,
-				this.moveDownButton, this.moveRightButton, this.dockButton);
+		bottomBar.getChildren().addAll(this.moveLeftButton, this.moveDownButton, this.moveRightButton, this.dockButton);
 		this.borderPane.setBottom(bottomBar);
 	}
 	
+	private void initLeftBar() {
+		VBox leftBar = new VBox();
+		leftBar.setAlignment(Pos.CENTER);
+		leftBar.getChildren().addAll(this.startButton, this.endButton);
+		this.borderPane.setLeft(leftBar);
+	}
+	
 	private void initEventHandler() {
+		this.startButton.setOnAction(event -> {
+			this.setGridStyle(IBrickConstants.DEFAULT_CELL_STYLE);
+			this.setGridStatus(IBrickConstants.POINT_EMPTY);
+			this.accept(BrickFactory.createBrick());
+		});
+		
 		this.moveLeftButton.setOnAction(event -> {
 			if(ruleManager.isOKToMoveLeft()) {
 				this.clearBrick();
@@ -167,7 +185,7 @@ public class Board extends Application {
 		
 		
 		this.redrawGrid();
-		this.accept(new Square());
+		this.accept(BrickFactory.createBrick());
 	}
 	
 	private void redrawBrick() {
@@ -215,16 +233,11 @@ public class Board extends Application {
 		}
 	}
 	
-	private List<Point> getAboveOccupiedPointsByRow(int row) {
-		List<Point> abovePoints = new ArrayList<Point>();
-		if(row > 0 && row < Board.ROW) {
-			for(Point point : this.pointStatusMap.keySet()) {
-				if(point.getRow() < row && this.getPointStatus(point) == IBrickConstants.POINT_OCCUPIED) {
-					abovePoints.add(point);
-				}
-			}
+	private void setGridStyle(String style) {
+		ObservableList<Node> nodeList = this.gridPane.getChildren();
+		for(Node node : nodeList) {
+			node.setStyle(style);
 		}
-		return abovePoints;
 	}
 	
 	private void setPointStatus(Point point, int status) {
@@ -244,11 +257,16 @@ public class Board extends Application {
 	}
 	
 	private void setRowStatus(int row, int status) {
-		ObservableList<Node> nodeList = this.gridPane.getChildren();
-		for(Node node : nodeList) {
-			if(GridPane.getRowIndex(node) == row) {
-				this.setPointStatus(new Point(row, GridPane.getColumnIndex(node)), status);
+		for(Point point : pointStatusMap.keySet()) {
+			if(point.getRow() == row) {
+				this.setPointStatus(point, status);
 			}
+		}
+	}
+	
+	private void setGridStatus(int status) {
+		for(Point point : pointStatusMap.keySet()) {
+			this.setPointStatus(point, status);
 		}
 	}
 	
@@ -259,6 +277,18 @@ public class Board extends Application {
 		} else {
 			return status;
 		}
+	}
+	
+	private List<Point> getAboveOccupiedPointsByRow(int row) {
+		List<Point> abovePoints = new ArrayList<Point>();
+		if(row > 0 && row < Board.ROW) {
+			for(Point point : this.pointStatusMap.keySet()) {
+				if(point.getRow() < row && this.getPointStatus(point) == IBrickConstants.POINT_OCCUPIED) {
+					abovePoints.add(point);
+				}
+			}
+		}
+		return abovePoints;
 	}
 
 	public static void main(String[] args) {
