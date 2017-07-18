@@ -1,4 +1,4 @@
-package RussiaBricks.brick;
+package brick;
 
 import java.util.ArrayList;
 import java.util.List;

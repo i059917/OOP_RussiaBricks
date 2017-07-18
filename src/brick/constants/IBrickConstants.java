@@ -1,4 +1,4 @@
-package RussiaBricks.brick.constants;
+package brick.constants;
 
 import javafx.scene.control.Button;
 

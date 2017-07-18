@@ -1,7 +1,8 @@
-package RussiaBricks;
+package brick.board;
 
-import RussiaBricks.brick.Point;
-import RussiaBricks.brick.constants.IBrickConstants;
+import brick.Point;
+import brick.constants.IBrickConstants;
+
 import java.util.Map;
 
 public class BoardRuleManager {

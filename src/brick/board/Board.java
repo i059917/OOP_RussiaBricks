@@ -1,14 +1,14 @@
-package RussiaBricks;
+package brick.board;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import RussiaBricks.brick.IBrick;
-import RussiaBricks.brick.Point;
-import RussiaBricks.brick.Square;
-import RussiaBricks.brick.constants.IBrickConstants;
+import brick.IBrick;
+import brick.Point;
+import brick.Square;
+import brick.constants.IBrickConstants;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;

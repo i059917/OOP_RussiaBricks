@@ -1,4 +1,4 @@
-package RussiaBricks.brick;
+package brick;
 
 public class Point implements Comparable {
 	private int row;
