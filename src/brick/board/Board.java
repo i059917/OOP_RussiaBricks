@@ -113,6 +113,7 @@ public class Board extends Application {
 		bottomBar.setAlignment(Pos.BASELINE_CENTER);
 		bottomBar.getChildren().addAll(this.moveLeftButton, this.moveDownButton, this.moveRightButton, this.dockButton);
 		this.borderPane.setBottom(bottomBar);
+		this.borderPane.getBottom().setDisable(true);
 	}
 	
 	private void initLeftBar() {
@@ -124,8 +125,9 @@ public class Board extends Application {
 	
 	private void initEventHandler() {
 		this.startButton.setOnAction(event -> {
-			this.setGridStyle(IBrickConstants.DEFAULT_CELL_STYLE);
 			this.setGridStatus(IBrickConstants.POINT_EMPTY);
+			this.setGridStyle(IBrickConstants.DEFAULT_CELL_STYLE);
+			this.borderPane.getBottom().setDisable(false);
 			this.accept(BrickFactory.createBrick());
 		});
 		
@@ -161,7 +163,16 @@ public class Board extends Application {
 	}
 	
 	private void dockBrick() {
-		//setBrickStyle(IBrickConstants.BG_COLOR_STYLE_BLACK);
+		for(Point point : this.currentBrick.getAllPoints()) {
+			if(point.getRow() == 0) {
+				// Game over :(
+				this.setGridStatus(IBrickConstants.POINT_OCCUPIED);
+				this.setGridStyle(IBrickConstants.BG_COLOR_STYLE_BLACK);
+				this.borderPane.getBottom().setDisable(true);
+				return;
+			}
+		}
+		
 		this.setBrickStatus(this.currentBrick, IBrickConstants.POINT_OCCUPIED);
 
 		int topFullRow = Board.ROW;
@@ -183,8 +194,7 @@ public class Board extends Application {
 			}
 		}
 		
-		
-		this.redrawGrid();
+		this.refreshGridStyleByStatus();
 		this.accept(BrickFactory.createBrick());
 	}
 	
@@ -192,7 +202,7 @@ public class Board extends Application {
 		setBrickStyle(IBrickConstants.BG_COLOR_STYLE_BLUE);
 	}
 	
-	private void redrawGrid() {
+	private void refreshGridStyleByStatus() {
 		ObservableList<Node> nodeList = this.gridPane.getChildren();
 		for(Node node : nodeList) {
 			Point point = new Point(GridPane.getRowIndex(node), 	GridPane.getColumnIndex(node));
